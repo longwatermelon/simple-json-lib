@@ -5,6 +5,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <typeinfo>
+#include <string>
 
 namespace json
 {
@@ -30,26 +32,15 @@ namespace json
 
         
         template <typename T, typename U>
-        friend std::map<T, U> load_json(std::string filepath);
+        friend std::map<T, U> load(std::string filepath);
     };
     
 
     template <typename T, typename U>
-    std::map<T, U> load_json(std::string filepath)
+    std::map<T, U> load(std::string filepath)
     {
         detail detail{};
         std::string contents = detail.read_file(filepath);
-        /*Lexer lexer{ contents };
-        Token token{ TokenType::TOKEN_EOF, "" };
-        token = lexer.get_next_token();
-        std::cout << "token type: " << int(token.type_) << " || token value: " << token.value << std::endl;
-        while (token.type_ != TokenType::TOKEN_EOF)
-        {
-            token = lexer.get_next_token();
-            std::cout << "token type: " << int(token.type_) << " || token value: " << token.value << std::endl;
-        }
-
-        std::cout << contents;*/
 
         Parser parser{ contents };
         parser.parse(); // keys and values vectors are filled now
@@ -73,7 +64,7 @@ namespace json
             { 
                 value = parser.values[i]->value->string_value; 
             }
-            else if (std::is_same<U, int>::value) 
+            else if (std::is_same<U, int>::value)
             { 
                 value = parser.values[i]->value->int_value; 
             }
@@ -84,5 +75,36 @@ namespace json
 
 
         return dict;
+    }
+
+
+    template <typename T, typename U>
+    void dump(std::string filepath, std::map<T, U> dict)
+    {
+        // clear out existing data to write in new dictionary
+        std::ofstream ofs;
+        ofs.open(filepath, std::ofstream::out | std::ofstream::trunc);
+        ofs.close();
+
+        std::ofstream file(filepath);
+        std::string final_string = "{\n\t";
+        for (auto& pair : dict)
+        {
+            std::string key, val;
+            
+            if (std::is_same<T, std::string>::value) { key = pair.first; key.insert(key.begin(), 1, '"'); key.insert(key.end(), 1, '"'); }
+            else if (std::is_same<T, int>::value) { std::stringstream strs; strs << pair.first; key = strs.str(); } // this will never happen but i like it like this
+
+            if (std::is_same<U, std::string>::value) { val = pair.second; val.insert(val.begin(), 1, '"'); val.insert(val.end(), 1, '"'); }
+            else if (std::is_same<U, int>::value) { std::stringstream strs; strs << pair.second; val = strs.str(); }
+
+            std::string addition = key + ": " + val + ",\n\t";
+            final_string += addition;
+        }
+        final_string.replace(final_string.end() - 3, final_string.end(), "\n");
+        final_string += "}";
+
+        file << final_string;
+        file.close();
     }
 }

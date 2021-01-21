@@ -15,8 +15,7 @@ enum class AstType
 struct AST
 {
 	AST(AstType type)
-	{
-	}
+	{}
 
 	AstType type{ AstType::AST_NOOP };
 	std::shared_ptr<AST> value;
