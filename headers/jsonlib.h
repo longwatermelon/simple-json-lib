@@ -51,11 +51,11 @@ namespace json
         {
             T key;
             U value;
-            if constexpr (std::is_same<T, std::string>::value) 
+            if constexpr (std::is_same_v<T, std::string>) 
             {
                 key = parser.keys[i]->value->string_value; 
             }
-            else if constexpr (std::is_same<T, int>::value) 
+            else if constexpr (std::is_same_v<T, int>) 
             {
                 key = parser.keys[i]->value->int_value; 
             }
@@ -65,7 +65,7 @@ namespace json
             {
                 value = parser.values[i]->value->string_value;
             }
-            else if constexpr (std::is_same<U, int>::value)
+            else if constexpr (std::is_same_v<U, int>)
             {
                 value = parser.values[i]->value->int_value;
             }
