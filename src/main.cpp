@@ -3,7 +3,7 @@
 int main()
 {
 	// example code
-	std::string path = R"(C:\Users\qianh\OneDrive\Documents\code\cpp\json-lib\jsontest.json)";
+	std::string path = "jsontest.json";
 	/*std::map<std::string, std::string> dict = json::load<std::string, std::string>(path);
 	dict["pee"] = "modified value";
 	json::dump<std::string, std::string>(path, dict);*/
