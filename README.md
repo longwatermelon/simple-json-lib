@@ -2,7 +2,7 @@
 
 work in progress
 
-only supports std::string and int for now
+supports types: std::string, int
 
 requires C++17 or above
 
