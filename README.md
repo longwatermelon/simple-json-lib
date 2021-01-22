@@ -4,6 +4,8 @@ work in progress
 
 only supports std::string and int for now
 
+requires C++17 or above
+
 # Using the library
 loading file:
 
