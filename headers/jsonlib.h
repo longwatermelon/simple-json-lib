@@ -10,7 +10,7 @@
 
 namespace json
 {
-    class detail
+    class detail // helper functions that users shouldn't use
     {
     private:
         std::string read_file(std::string filepath)
@@ -51,25 +51,14 @@ namespace json
         {
             T key;
             U value;
-            if constexpr (std::is_same_v<T, std::string>) 
-            {
-                key = parser.keys[i]->value->string_value; 
-            }
-            else if constexpr (std::is_same_v<T, int>) 
-            {
-                key = parser.keys[i]->value->int_value; 
-            }
+
+            if constexpr (std::is_same_v<T, std::string>) key = parser.keys[i]->value->string_value;
+            else if constexpr (std::is_same_v<T, int>) key = parser.keys[i]->value->int_value;
 
             
-            if constexpr (std::is_same_v<U, std::string>)
-            {
-                value = parser.values[i]->value->string_value;
-            }
-            else if constexpr (std::is_same_v<U, int>)
-            {
-                value = parser.values[i]->value->int_value;
-            }
-        
+            if constexpr (std::is_same_v<U, std::string>) value = parser.values[i]->value->string_value;
+            else if constexpr (std::is_same_v<U, int>) value = parser.values[i]->value->int_value;
+            
             
             dict[key] = value;
         }
@@ -89,6 +78,7 @@ namespace json
 
         std::ofstream file(filepath);
         std::string final_string = "{\n\t";
+        
         for (auto& pair : dict)
         {
             std::string key, val;
@@ -102,6 +92,7 @@ namespace json
             std::string addition = key + ": " + val + ",\n\t";
             final_string += addition;
         }
+
         final_string.replace(final_string.end() - 3, final_string.end(), "\n");
         final_string += "}";
 

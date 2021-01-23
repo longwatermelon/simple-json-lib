@@ -119,7 +119,6 @@ struct Parser
 
 	void parse_statements()
 	{
-
 		auto expr = parse_expr();
 		assign_item_to_vector(expr);
 
