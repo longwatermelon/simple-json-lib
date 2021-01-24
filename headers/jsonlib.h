@@ -52,12 +52,12 @@ namespace json
             T key;
             U value;
 
-            if constexpr (std::is_same_v<T, std::string>) key = parser.keys[i]->value->string_value;
-            else if constexpr (std::is_same_v<T, int>) key = parser.keys[i]->value->int_value;
+            if constexpr (std::is_same_v<T, std::string>) key = parser.keys[i]->value->string_value; // only strings allowed as keys
 
             
             if constexpr (std::is_same_v<U, std::string>) value = parser.values[i]->value->string_value;
             else if constexpr (std::is_same_v<U, int>) value = parser.values[i]->value->int_value;
+            else if constexpr (std::is_same_v<U, float>) value = parser.values[i]->value->float_value;
             
             
             dict[key] = value;
@@ -83,11 +83,11 @@ namespace json
         {
             std::string key, val;
             
-            if (std::is_same<T, std::string>::value) { key = pair.first; key.insert(key.begin(), 1, '"'); key.insert(key.end(), 1, '"'); }
-            else if (std::is_same<T, int>::value) { std::stringstream strs; strs << pair.first; key = strs.str(); } // this will never happen but i like it like this
+            if (std::is_same_v<T, std::string>) { key = pair.first; key.insert(key.begin(), 1, '"'); key.insert(key.end(), 1, '"'); } // only strings allowed as keys
 
-            if (std::is_same<U, std::string>::value) { val = pair.second; val.insert(val.begin(), 1, '"'); val.insert(val.end(), 1, '"'); }
-            else if (std::is_same<U, int>::value) { std::stringstream strs; strs << pair.second; val = strs.str(); }
+            if (std::is_same_v<U, std::string>) { val = pair.second; val.insert(val.begin(), 1, '"'); val.insert(val.end(), 1, '"'); }
+            else if (std::is_same_v<U, int>) { std::stringstream strs; strs << pair.second; val = strs.str(); }
+            else if (std::is_same_v<U, float>) { std::stringstream strs; strs << pair.second; val = strs.str(); }
 
             std::string addition = key + ": " + val + ",\n\t";
             final_string += addition;

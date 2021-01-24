@@ -9,6 +9,7 @@ enum class AstType
 	AST_VALUE,
 	AST_STRING,
 	AST_INT,
+	AST_FLOAT,
 	AST_NOOP
 };
 
@@ -25,4 +26,7 @@ struct AST
 
 	// int
 	int int_value{ 0 };
+
+	// float
+	float float_value{ 0.0f };
 };

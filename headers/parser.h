@@ -37,7 +37,8 @@ struct Parser
 				{TokenType::TOKEN_INT, "int"},
 				{TokenType::TOKEN_LBRACE, "{"},
 				{TokenType::TOKEN_RBRACE, "}"},
-				{TokenType::TOKEN_STRING, "string"}
+				{TokenType::TOKEN_STRING, "string"},
+				{TokenType::TOKEN_PERIOD, "."}
 			};
 
 			std::stringstream err;
@@ -88,7 +89,34 @@ struct Parser
 		ast_int->type = AstType::AST_INT;
 		std::istringstream(current_token.value) >> ast_int->int_value;
 		eat(TokenType::TOKEN_INT);
+
+		// checking for float
+		if (current_token.type_ == TokenType::TOKEN_PERIOD)
+		{
+			return parse_float(ast_int->int_value);
+		}
+
 		return ast_int;
+	}
+
+
+	std::shared_ptr<AST> parse_float(int int_val)
+	{
+		eat(TokenType::TOKEN_PERIOD);
+
+		float float_val = static_cast<float>(int_val);
+		int after_decimal = 0;
+		std::istringstream(current_token.value) >> after_decimal;
+		std::stringstream final_float;
+		final_float << int_val << '.' << after_decimal;
+		std::istringstream(final_float.str()) >> float_val;
+
+		eat(TokenType::TOKEN_INT);
+
+		const auto ast_float = std::make_shared<AST>(AstType::AST_FLOAT);
+		ast_float->type = AstType::AST_FLOAT;
+		ast_float->float_value = float_val;
+		return ast_float;
 	}
 
 	

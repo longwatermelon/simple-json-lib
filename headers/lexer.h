@@ -49,6 +49,7 @@ struct Lexer
 			case '{': return Token(TokenType::TOKEN_LBRACE, collect_char_as_str()); break;
 			case '}': return Token(TokenType::TOKEN_RBRACE, collect_char_as_str()); break;
 			case '"': return Token(TokenType::TOKEN_STRING, collect_string()); break;
+			case '.': return Token(TokenType::TOKEN_PERIOD, collect_char_as_str()); break;
 			}
 
 			advance();

@@ -9,6 +9,7 @@ enum class TokenType
 	TOKEN_COMMA,
 	TOKEN_STRING,
 	TOKEN_INT,
+	TOKEN_PERIOD,
 	TOKEN_EOF
 };
 
