@@ -1,0 +1,1 @@
+g++ -std=c++17 -I src -o build/main.exe src/*.cpp
