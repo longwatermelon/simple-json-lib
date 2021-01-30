@@ -6,6 +6,8 @@
 #include <string>
 #include <sstream>
 
+namespace json_utils
+{
 struct Parser
 {
 	Lexer lexer;
@@ -169,3 +171,4 @@ struct Parser
 		}
 	}
 };
+}

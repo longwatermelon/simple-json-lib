@@ -3,7 +3,8 @@
 #include <memory>
 #include <iostream>
 
-
+namespace json_utils
+{
 struct Lexer
 {
 	char current_char{ ' ' };
@@ -105,3 +106,4 @@ private:
 		return val;
 	}
 };
+}

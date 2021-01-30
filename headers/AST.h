@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+namespace json_utils
+{
 enum class AstType
 {
 	AST_KEY,
@@ -30,3 +32,4 @@ struct AST
 	// float
 	float float_value{ 0.0f };
 };
+}

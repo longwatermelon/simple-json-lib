@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+namespace json_utils
+{
 enum class TokenType
 {
 	TOKEN_LBRACE,
@@ -27,3 +29,4 @@ struct Token
 
 	
 };
+}
