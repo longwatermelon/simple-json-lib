@@ -5,31 +5,31 @@
 
 namespace json_utils
 {
-enum class AstType
-{
-	AST_KEY,
-	AST_VALUE,
-	AST_STRING,
-	AST_INT,
-	AST_FLOAT,
-	AST_NOOP
-};
+	enum class AstType
+	{
+		AST_KEY,
+		AST_VALUE,
+		AST_STRING,
+		AST_INT,
+		AST_FLOAT,
+		AST_NOOP
+	};
 
-struct AST
-{
-	AST(AstType type)
-	{}
+	struct AST
+	{
+		AST(AstType type)
+		{}
 
-	AstType type{ AstType::AST_NOOP };
-	std::shared_ptr<AST> value;
+		AstType type{ AstType::AST_NOOP };
+		std::shared_ptr<AST> value;
 
-	// string
-	std::string string_value;
+		// string
+		std::string string_value;
 
-	// int
-	int int_value{ 0 };
+		// int
+		int int_value{ 0 };
 
-	// float
-	float float_value{ 0.0f };
-};
+		// float
+		float float_value{ 0.0f };
+	};
 }
