@@ -90,7 +90,7 @@ namespace json_utils
 			ast_int->type = AstType::AST_INT;
 			std::istringstream(current_token.value) >> ast_int->int_value;
 			eat(TokenType::TOKEN_INT);
-			ast_int->float_value = ast_int->int_value; // safeguard against not detecting floats (1.0 turns into 1 when written into json)
+			ast_int->float_value = static_cast<float>(ast_int->int_value); // safeguard against not detecting floats (1.0 turns into 1 when written into json)
 
 			// checking for float
 			if (current_token.type_ == TokenType::TOKEN_PERIOD)

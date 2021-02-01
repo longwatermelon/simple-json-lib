@@ -30,9 +30,30 @@ namespace json
             return contents.str();
         }
 
+
+        template <typename T>
+        void fill_map(std::map<std::string, T>* map, json_utils::Parser* parser)
+        {
+            for (int i = 0; i < parser->keys.size(); ++i)
+            {
+                std::string key = parser->keys[i]->value->string_value;
+                T value;
+
+                if constexpr (std::is_same_v<T, std::string>) value = parser->values[i]->value->string_value;
+                else if constexpr (std::is_same_v<T, int>) value = parser->values[i]->value->int_value;
+                else if constexpr (std::is_same_v<T, float>) value = parser->values[i]->value->float_value;
+
+
+                (*map)[key] = value;
+            }
+        }
+
     
         template <typename T>
         friend std::map<std::string, T> load(std::string* filepath);
+
+        template <typename T>
+        friend void load(std::string* fp, std::map<std::string, T>* map);
     };
 
 
@@ -47,22 +68,23 @@ namespace json
         catch (const std::runtime_error& ex) { std::cout << ex.what() << "\n"; }
 
         std::map<std::string, T> dict;
-
-        for (int i = 0; i < parser.keys.size(); ++i)
-        {
-            std::string key = parser.keys[i]->value->string_value;
-            T value;
-        
-            if constexpr (std::is_same_v<T, std::string>) value = parser.values[i]->value->string_value;
-            else if constexpr (std::is_same_v<T, int>) value = parser.values[i]->value->int_value;
-            else if constexpr (std::is_same_v<T, float>) value = parser.values[i]->value->float_value;
-        
-        
-            dict[key] = value;
-        }
-
+        detail.fill_map(&dict, &parser);
 
         return dict;
+    }
+
+
+    template <typename T>
+    void load(std::string* fp, std::map<std::string, T>* map)
+    {
+        detail detail{};
+        std::string contents = detail.read_file(*fp);
+
+        json_utils::Parser parser{ contents };
+        try { parser.parse(); }
+        catch (const std::runtime_error& ex) { std::cout << ex.what() << "\n"; }
+
+        detail.fill_map(map, &parser);
     }
 
 

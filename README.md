@@ -11,6 +11,10 @@ loading file:
 
 ```std::map<first type, second type> example = json::load<second type>(file path pointer);```
 
+or if you dont like angular brackets
+
+```json::load(file path pointer, map pointer);```
+
 
 dumping into file:
 
