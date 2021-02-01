@@ -42,7 +42,15 @@ namespace json
                 if constexpr (std::is_same_v<T, std::string>) value = parser->values[i]->value->string_value;
                 else if constexpr (std::is_same_v<T, int>) value = parser->values[i]->value->int_value;
                 else if constexpr (std::is_same_v<T, float>) value = parser->values[i]->value->float_value;
-
+                else if constexpr (std::is_same_v<T, std::vector<std::string>> || std::is_same_v<T, std::vector<int>> || std::is_same_v<T, std::vector<float>>)
+                {
+                    for (int j = 0; j < parser->values[i]->value->vector_value.size(); ++j)
+                    {
+                        if constexpr (std::is_same_v<T, std::vector<int>>) value.push_back(std::any_cast<int>(parser->values[i]->value->vector_value[j]));
+                        else if constexpr (std::is_same_v<T, std::vector<float>>) value.push_back(std::any_cast<float>(parser->values[i]->value->vector_value[j]));
+                        else if constexpr (std::is_same_v<T, std::vector<std::string>>) value.push_back(std::any_cast<std::string>(parser->values[i]->value->vector_value[j]));
+                    }
+                }
 
                 (*map)[key] = value;
             }
@@ -54,6 +62,13 @@ namespace json
             str->insert(str->begin(), 1, '"');
             str->insert(str->end(), 1, '"');
         }
+
+
+        template <typename T = int>
+        bool is_string(T type) { return false; }
+
+        template <>
+        bool is_string(std::string type) { return true; }
 
     
         template <typename T>
@@ -118,8 +133,28 @@ namespace json
 
             std::stringstream val;
             
-            if (std::is_same_v<T, std::string>) { val << '"' << pair.second << '"'; }
-            else { val << pair.second; }
+            if constexpr (std::is_same_v<T, std::string>) { val << '"' << pair.second << '"'; }
+            else if constexpr (std::is_same_v<T, std::vector<std::string>> || std::is_same_v<T, std::vector<int>> || std::is_same_v<T, std::vector<float>>)
+            {
+                val << "[\n\t\t";
+                for (int i = 0; i < pair.second.size(); ++i)
+                {
+                    if (detail.is_string<>(pair.second[i])) val << '"' << pair.second[i] << "\",\n\t\t";
+                    else val << pair.second[i] << ",\n\t\t";
+                }
+
+                std::string temp = val.str();
+
+                // clear stringstream
+                val.str("");
+                val.clear();
+
+                temp.replace(temp.end() - 4, temp.end(), "\n");
+                
+                val << temp << "\t]";
+            }
+            else if constexpr (std::is_same_v<T, int>) { val << pair.second; }
+            else if constexpr (std::is_same_v<T, float>) { val << pair.second; }
 
             std::stringstream ss;
             ss << key << ": " << val.str() << ",\n\t";

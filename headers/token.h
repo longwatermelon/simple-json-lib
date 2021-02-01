@@ -12,6 +12,8 @@ namespace json_utils
 		TOKEN_STRING,
 		TOKEN_INT,
 		TOKEN_PERIOD,
+		TOKEN_LBRACKET,
+		TOKEN_RBRACKET,
 		TOKEN_EOF
 	};
 

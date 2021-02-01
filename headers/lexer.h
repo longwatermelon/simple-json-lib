@@ -47,12 +47,14 @@ namespace json_utils
 
 				switch (current_char)
 				{
-				case ',': return Token(TokenType::TOKEN_COMMA, collect_char_as_str()); break;
-				case ':': return Token(TokenType::TOKEN_COLON, collect_char_as_str()); break;
-				case '{': return Token(TokenType::TOKEN_LBRACE, collect_char_as_str()); break;
-				case '}': return Token(TokenType::TOKEN_RBRACE, collect_char_as_str()); break;
-				case '"': return Token(TokenType::TOKEN_STRING, collect_string()); break;
-				case '.': return Token(TokenType::TOKEN_PERIOD, collect_char_as_str()); break;
+				case ',': return Token(TokenType::TOKEN_COMMA, collect_char_as_str());
+				case ':': return Token(TokenType::TOKEN_COLON, collect_char_as_str());
+				case '{': return Token(TokenType::TOKEN_LBRACE, collect_char_as_str());
+				case '}': return Token(TokenType::TOKEN_RBRACE, collect_char_as_str());
+				case '"': return Token(TokenType::TOKEN_STRING, collect_string());
+				case '.': return Token(TokenType::TOKEN_PERIOD, collect_char_as_str());
+				case '[': return Token(TokenType::TOKEN_LBRACKET, collect_char_as_str());
+				case ']': return Token(TokenType::TOKEN_RBRACKET, collect_char_as_str());
 				}
 
 				advance();

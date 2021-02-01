@@ -5,6 +5,8 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include <any>
+
 
 namespace json_utils
 {
@@ -40,7 +42,9 @@ namespace json_utils
 					{TokenType::TOKEN_LBRACE, "{"},
 					{TokenType::TOKEN_RBRACE, "}"},
 					{TokenType::TOKEN_STRING, "string"},
-					{TokenType::TOKEN_PERIOD, "."}
+					{TokenType::TOKEN_PERIOD, "."},
+					{TokenType::TOKEN_LBRACKET, "["},
+					{TokenType::TOKEN_RBRACKET, "]"}
 				};
 
 				std::stringstream err;
@@ -132,6 +136,41 @@ namespace json_utils
 		}
 
 
+		std::shared_ptr<AST> parse_vector()
+		{
+			std::shared_ptr<AST> ast_vector = std::make_shared<AST>(AstType::AST_VECTOR);
+			ast_vector->type = AstType::AST_VECTOR;
+
+			eat(TokenType::TOKEN_LBRACKET);
+
+			std::shared_ptr<AST> item = parse_expr();
+			switch (item->type)
+			{
+			case AstType::AST_INT: ast_vector->vector_value.push_back(item->int_value); break;
+			case AstType::AST_STRING: ast_vector->vector_value.push_back(item->string_value); break;
+			case AstType::AST_FLOAT: ast_vector->vector_value.push_back(item->float_value); break;
+			}
+
+			while (current_token.type_ != TokenType::TOKEN_RBRACKET)
+			{
+				eat(TokenType::TOKEN_COMMA);
+				
+				std::shared_ptr<AST> item = parse_expr();
+
+				switch (item->type)
+				{
+				case AstType::AST_INT: ast_vector->vector_value.push_back(item->int_value); break;
+				case AstType::AST_STRING: ast_vector->vector_value.push_back(item->string_value); break;
+				case AstType::AST_FLOAT: ast_vector->vector_value.push_back(item->float_value); break;
+				}
+			}
+
+			eat(TokenType::TOKEN_RBRACKET);
+
+			return ast_vector;
+		}
+
+
 		std::shared_ptr<AST> parse_expr()
 		{
 			switch (current_token.type_)
@@ -141,6 +180,7 @@ namespace json_utils
 			case TokenType::TOKEN_COMMA: return parse_key();    // after a comma comes a key (key: value, key2: value2)
 			case TokenType::TOKEN_INT: return parse_int();
 			case TokenType::TOKEN_STRING: return parse_string();
+			case TokenType::TOKEN_LBRACKET: return parse_vector();
 			}
 
 			return nullptr;

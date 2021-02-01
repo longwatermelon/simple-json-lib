@@ -2,6 +2,8 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <any>
+
 
 namespace json_utils
 {
@@ -12,6 +14,7 @@ namespace json_utils
 		AST_STRING,
 		AST_INT,
 		AST_FLOAT,
+		AST_VECTOR,
 		AST_NOOP
 	};
 
@@ -31,5 +34,8 @@ namespace json_utils
 
 		// float
 		float float_value{ 0.0f };
+
+		// vector
+		std::vector<std::any> vector_value;
 	};
 }
