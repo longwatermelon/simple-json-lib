@@ -5,11 +5,13 @@ supports types: std::string, int, float
 requires C++17 or above
 
 # Using the library
+examples in main.cpp
+
 loading file:
 
-```std::map<first type, second type> example = json::load<first type, second type>(filepath);```
+```std::map<first type, second type> example = json::load<second type>(file path pointer);```
 
 
 dumping into file:
 
-```json::dump<first type, second type>(file path, map name);```
+```json::dump(file path pointer, map pointer);```

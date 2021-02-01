@@ -4,18 +4,19 @@ int main()
 {
 	// example code
 	std::string path = "jsontest.json";
-	std::map<std::string, std::string> dict = json::load<std::string, std::string>(path);
-	dict["pee"] = "modified value";
-	json::dump<std::string, std::string>(path, dict);
 
-	std::map<std::string, int> new_dict{
-		{"5", 3},
-		{"2", 1}
+	std::map<std::string, float> dict = json::load<float>(&path);
+	for (const auto& pair : dict)
+	{
+		std::cout << pair.first << " | " << pair.second << "\n";
+	}
+
+	std::map<std::string, float> new_dict{
+		{"test", 1.0f},
+		{"your mom", 2.5f}
 	};
 
-	json::dump<std::string, int>(path, new_dict);
-
-	new_dict = json::load<std::string, int>(path);
+	json::dump(&path, &new_dict);
 
 	return 0;
 }

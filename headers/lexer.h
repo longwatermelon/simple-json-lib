@@ -2,6 +2,7 @@
 #include "token.h"
 #include <memory>
 #include <iostream>
+#include <sstream>
 
 namespace json_utils
 {
