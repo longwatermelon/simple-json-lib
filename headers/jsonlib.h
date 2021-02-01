@@ -13,7 +13,7 @@ namespace json
     class Detail // helper functions that users shouldn't use
     {
     private:
-        std::string read_file(std::string filepath)
+        static std::string read_file(std::string filepath)
         {
             std::ifstream infile;
             infile.open(filepath);
@@ -32,7 +32,7 @@ namespace json
 
 
         template <typename T>
-        void fill_map(std::map<std::string, T>* map, json_utils::Parser* parser)
+        static void fill_map(std::map<std::string, T>* map, json_utils::Parser* parser)
         {
             for (int i = 0; i < parser->keys.size(); ++i)
             {
@@ -57,7 +57,7 @@ namespace json
         }
 
 
-        void turn_into_str(std::string* str)
+        static void turn_into_str(std::string* str)
         {
             str->insert(str->begin(), 1, '"');
             str->insert(str->end(), 1, '"');
@@ -65,9 +65,9 @@ namespace json
 
 
         template <typename T>
-        bool is_string(T type) { return false; }
+        static bool is_string(T type) { return false; }
 
-        bool is_string(std::string type) { return true; }
+        static bool is_string(std::string type) { return true; }
 
     
         template <typename T>
@@ -84,31 +84,29 @@ namespace json
     template <typename T>
     std::map<std::string, T> load(std::string* filepath)
     {
-        Detail detail{};
-        std::string contents = detail.read_file(*filepath);
+        std::string contents = Detail::read_file(*filepath);
 
         json_utils::Parser parser{ contents };
         try { parser.parse(); } // keys and values vectors are filled now
         catch (const std::runtime_error& ex) { std::cout << ex.what() << "\n"; }
 
         std::map<std::string, T> dict;
-        detail.fill_map(&dict, &parser);
+        Detail::fill_map(&dict, &parser);
 
         return dict;
     }
-
+    
 
     template <typename T>
     void load(std::string* fp, std::map<std::string, T>* map)
     {
-        Detail detail{};
-        std::string contents = detail.read_file(*fp);
+        std::string contents = Detail::read_file(*fp);
 
         json_utils::Parser parser{ contents };
         try { parser.parse(); }
         catch (const std::runtime_error& ex) { std::cout << ex.what() << "\n"; }
 
-        detail.fill_map(map, &parser);
+        Detail::fill_map(map, &parser);
     }
 
 
@@ -123,12 +121,10 @@ namespace json
         std::ofstream file(*filepath);
         std::string final_string = "{\n\t";
         
-        Detail detail{};
-
         for (auto& pair : *dict)
         {
             std::string key = pair.first;
-            detail.turn_into_str(&key);
+            Detail::turn_into_str(&key);
 
             std::stringstream val;
             
@@ -138,7 +134,7 @@ namespace json
                 val << "[\n\t\t";
                 for (int i = 0; i < pair.second.size(); ++i)
                 {
-                    if (detail.is_string(pair.second[i])) val << '"' << pair.second[i] << "\",\n\t\t";
+                    if (Detail::is_string(pair.second[i])) val << '"' << pair.second[i] << "\",\n\t\t";
                     else val << pair.second[i] << ",\n\t\t";
                 }
 
