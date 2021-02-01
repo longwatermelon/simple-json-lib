@@ -13,7 +13,7 @@ namespace json
     class Detail // helper functions that users shouldn't use
     {
     private:
-        static std::string read_file(std::string filepath)
+        static std::string read_file(const std::string& filepath)
         {
             std::ifstream infile;
             infile.open(filepath);
@@ -57,10 +57,10 @@ namespace json
         }
 
 
-        static void turn_into_str(std::string* str)
+        static void turn_into_str(std::string& str)
         {
-            str->insert(str->begin(), 1, '"');
-            str->insert(str->end(), 1, '"');
+            str.insert(str.begin(), 1, '"');
+            str.insert(str.end(), 1, '"');
         }
 
 
@@ -71,20 +71,20 @@ namespace json
 
     
         template <typename T>
-        friend std::map<std::string, T> load(std::string* filepath);
+        friend std::map<std::string, T> load(const std::string& filepath);
 
         template <typename T>
-        friend void load(std::string* fp, std::map<std::string, T>* map);
+        friend void load(const std::string& fp, std::map<std::string, T>* map);
 
         template <typename T>
-        friend void dump(std::string* filepath, std::map<std::string, T>* dict);
+        friend void dump(const std::string& filepath, std::map<std::string, T>* dict);
     };
 
 
     template <typename T>
-    std::map<std::string, T> load(std::string* filepath)
+    std::map<std::string, T> load(const std::string& filepath)
     {
-        std::string contents = Detail::read_file(*filepath);
+        std::string contents = Detail::read_file(filepath);
 
         json_utils::Parser parser{ contents };
         try { parser.parse(); } // keys and values vectors are filled now
@@ -98,9 +98,9 @@ namespace json
     
 
     template <typename T>
-    void load(std::string* fp, std::map<std::string, T>* map)
+    void load(const std::string& fp, std::map<std::string, T>* map)
     {
-        std::string contents = Detail::read_file(*fp);
+        std::string contents = Detail::read_file(fp);
 
         json_utils::Parser parser{ contents };
         try { parser.parse(); }
@@ -111,20 +111,20 @@ namespace json
 
 
     template <typename T>
-    void dump(std::string* filepath, std::map<std::string, T>* dict)
+    void dump(const std::string& filepath, std::map<std::string, T>* dict)
     {
         // clear out existing data to write in new dictionary
         std::ofstream ofs;
-        ofs.open(*filepath, std::ofstream::out | std::ofstream::trunc);
+        ofs.open(filepath, std::ofstream::out | std::ofstream::trunc);
         ofs.close();
 
-        std::ofstream file(*filepath);
+        std::ofstream file(filepath);
         std::string final_string = "{\n\t";
         
         for (auto& pair : *dict)
         {
             std::string key = pair.first;
-            Detail::turn_into_str(&key);
+            Detail::turn_into_str(key);
 
             std::stringstream val;
             
