@@ -67,7 +67,6 @@ namespace json
         template <typename T = int>
         bool is_string(T type) { return false; }
 
-        template <>
         bool is_string(std::string type) { return true; }
 
     
@@ -139,7 +138,7 @@ namespace json
                 val << "[\n\t\t";
                 for (int i = 0; i < pair.second.size(); ++i)
                 {
-                    if (detail.is_string<>(pair.second[i])) val << '"' << pair.second[i] << "\",\n\t\t";
+                    if (detail.is_string(pair.second[i])) val << '"' << pair.second[i] << "\",\n\t\t";
                     else val << pair.second[i] << ",\n\t\t";
                 }
 
