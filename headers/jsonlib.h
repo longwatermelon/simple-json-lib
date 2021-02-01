@@ -64,7 +64,7 @@ namespace json
         }
 
 
-        template <typename T = int>
+        template <typename T>
         bool is_string(T type) { return false; }
 
         bool is_string(std::string type) { return true; }
