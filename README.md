@@ -1,6 +1,6 @@
 # simple-json-lib
 
-supports types: std::string, int, float
+supports types: std::string, int, float, std::vector
 
 requires C++17 or above
 
