@@ -21,9 +21,9 @@ int main()
 	json::dump(&path, &new_dict);
 
 	// use of overloaded load function if you dont like angular brackets
-	std::map<std::string, float> dict;
-	json::load(&path, &dict);
-	for (const auto& pair : dict)
+	std::map<std::string, float> overload_example;
+	json::load(&path, &overload_example);
+	for (const auto& pair : overload_example)
 	{
 		std::cout << pair.first << " | " << pair.second << "\n";
 	}

@@ -48,12 +48,22 @@ namespace json
             }
         }
 
+
+        void turn_into_str(std::string* str)
+        {
+            str->insert(str->begin(), 1, '"');
+            str->insert(str->end(), 1, '"');
+        }
+
     
         template <typename T>
         friend std::map<std::string, T> load(std::string* filepath);
 
         template <typename T>
         friend void load(std::string* fp, std::map<std::string, T>* map);
+
+        template <typename T>
+        friend void dump(std::string* filepath, std::map<std::string, T>* dict);
     };
 
 
@@ -98,20 +108,23 @@ namespace json
 
         std::ofstream file(*filepath);
         std::string final_string = "{\n\t";
-    
+        
+        detail detail{};
+
         for (auto& pair : *dict)
         {
-            std::string key, val;
-            key = pair.first;
-            key.insert(key.begin(), 1, '"');
-            key.insert(key.end(), 1, '"');
+            std::string key = pair.first;
+            detail.turn_into_str(&key);
 
-            if (std::is_same_v<T, std::string>) { val = pair.second; val.insert(val.begin(), 1, '"'); val.insert(val.end(), 1, '"'); }
-            else if (std::is_same_v<T, int>) { std::stringstream ss; ss << pair.second; val = ss.str(); }
-            else if (std::is_same_v<T, float>) { std::stringstream ss; ss << pair.second; val = ss.str(); }
+            std::stringstream val;
+            
+            if (std::is_same_v<T, std::string>) { val << '"' << pair.second << '"'; }
+            else { val << pair.second; }
 
-            std::string addition = key + ": " + val + ",\n\t";
-            final_string += addition;
+            std::stringstream ss;
+            ss << key << ": " << val.str() << ",\n\t";
+
+            final_string += ss.str();
         }
 
         final_string.replace(final_string.end() - 3, final_string.end(), "\n");
