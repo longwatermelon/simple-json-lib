@@ -10,7 +10,7 @@
 
 namespace json
 {
-    class detail // helper functions that users shouldn't use
+    class Detail // helper functions that users shouldn't use
     {
     private:
         std::string read_file(std::string filepath)
@@ -84,7 +84,7 @@ namespace json
     template <typename T>
     std::map<std::string, T> load(std::string* filepath)
     {
-        detail detail{};
+        Detail detail{};
         std::string contents = detail.read_file(*filepath);
 
         json_utils::Parser parser{ contents };
@@ -101,7 +101,7 @@ namespace json
     template <typename T>
     void load(std::string* fp, std::map<std::string, T>* map)
     {
-        detail detail{};
+        Detail detail{};
         std::string contents = detail.read_file(*fp);
 
         json_utils::Parser parser{ contents };
@@ -123,7 +123,7 @@ namespace json
         std::ofstream file(*filepath);
         std::string final_string = "{\n\t";
         
-        detail detail{};
+        Detail detail{};
 
         for (auto& pair : *dict)
         {
