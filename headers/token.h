@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace json_utils
+namespace jsonutils
 {
 	enum class TokenType
 	{

@@ -32,7 +32,7 @@ namespace json
 
 
         template <typename T>
-        static void fill_map(std::map<std::string, T>* map, json_utils::Parser* parser)
+        static void fill_map(std::map<std::string, T>* map, jsonutils::Parser* parser)
         {
             for (int i = 0; i < parser->keys.size(); ++i)
             {
@@ -71,22 +71,22 @@ namespace json
 
     
         template <typename T>
-        friend std::map<std::string, T> load(const std::string& filepath);
+        friend std::map<std::string, T> load(const std::string& fp);
 
         template <typename T>
         friend void load(const std::string& fp, std::map<std::string, T>* map);
 
         template <typename T>
-        friend void dump(const std::string& filepath, std::map<std::string, T>* dict);
+        friend void dump(const std::string& fp, std::map<std::string, T>* map);
     };
 
 
     template <typename T>
-    std::map<std::string, T> load(const std::string& filepath)
+    std::map<std::string, T> load(const std::string& fp)
     {
-        std::string contents = Detail::read_file(filepath);
+        std::string contents = Detail::read_file(fp);
 
-        json_utils::Parser parser{ contents };
+        jsonutils::Parser parser{ contents };
         try { parser.parse(); } // keys and values vectors are filled now
         catch (const std::runtime_error& ex) { std::cout << ex.what() << "\n"; }
 
@@ -102,7 +102,7 @@ namespace json
     {
         std::string contents = Detail::read_file(fp);
 
-        json_utils::Parser parser{ contents };
+        jsonutils::Parser parser{ contents };
         try { parser.parse(); }
         catch (const std::runtime_error& ex) { std::cout << ex.what() << "\n"; }
 
@@ -111,17 +111,17 @@ namespace json
 
 
     template <typename T>
-    void dump(const std::string& filepath, std::map<std::string, T>* dict)
+    void dump(const std::string& fp, std::map<std::string, T>* map)
     {
         // clear out existing data to write in new dictionary
         std::ofstream ofs;
-        ofs.open(filepath, std::ofstream::out | std::ofstream::trunc);
+        ofs.open(fp, std::ofstream::out | std::ofstream::trunc);
         ofs.close();
 
-        std::ofstream file(filepath);
+        std::ofstream file(fp);
         std::string final_string = "{\n\t";
         
-        for (auto& pair : *dict)
+        for (auto& pair : *map)
         {
             std::string key = pair.first;
             Detail::turn_into_str(key);

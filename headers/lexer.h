@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace json_utils
+namespace jsonutils
 {
 	struct Lexer
 	{

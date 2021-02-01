@@ -5,7 +5,7 @@
 #include <any>
 
 
-namespace json_utils
+namespace jsonutils
 {
 	enum class AstType
 	{

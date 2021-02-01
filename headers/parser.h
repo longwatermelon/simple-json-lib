@@ -8,7 +8,7 @@
 #include <any>
 
 
-namespace json_utils
+namespace jsonutils
 {
 	struct Parser
 	{
