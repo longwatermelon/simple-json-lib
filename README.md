@@ -9,13 +9,13 @@ examples in main.cpp
 
 loading file:
 
-```std::map<first type, second type> example = json::load<second type>(file path pointer);```
+```std::map<first type, second type> example = json::load<second type>(file path);```
 
 or if you dont like angular brackets
 
-```json::load(file path pointer, map pointer);```
+```json::load(file path, map pointer);```
 
 
 dumping into file:
 
-```json::dump(file path pointer, map pointer);```
+```json::dump(file path, map pointer);```
