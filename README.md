@@ -15,7 +15,7 @@ or if you dont like angular brackets
 
 ```json::load(file path, map pointer);```
 
-
+>>>>>>>>>
 
 dumping into file:
 
