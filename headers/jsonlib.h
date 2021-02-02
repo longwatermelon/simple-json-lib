@@ -32,27 +32,27 @@ namespace json
 
 
         template <typename T>
-        static void fill_map(std::map<std::string, T>* map, jsonutils::Parser* parser)
+        static void fill_map(std::map<std::string, T>& map, jsonutils::Parser& parser)
         {
-            for (int i = 0; i < parser->keys.size(); ++i)
+            for (int i = 0; i < parser.keys.size(); ++i)
             {
-                std::string key = parser->keys[i]->value->string_value;
+                std::string key = parser.keys[i]->value->string_value;
                 T value;
 
-                if constexpr (std::is_same_v<T, std::string>) value = parser->values[i]->value->string_value;
-                else if constexpr (std::is_same_v<T, int>) value = parser->values[i]->value->int_value;
-                else if constexpr (std::is_same_v<T, float>) value = parser->values[i]->value->float_value;
+                if constexpr (std::is_same_v<T, std::string>) value = parser.values[i]->value->string_value;
+                else if constexpr (std::is_same_v<T, int>) value = parser.values[i]->value->int_value;
+                else if constexpr (std::is_same_v<T, float>) value = parser.values[i]->value->float_value;
                 else if constexpr (std::is_same_v<T, std::vector<std::string>> || std::is_same_v<T, std::vector<int>> || std::is_same_v<T, std::vector<float>>)
                 {
-                    for (int j = 0; j < parser->values[i]->value->vector_value.size(); ++j)
+                    for (int j = 0; j < parser.values[i]->value->vector_value.size(); ++j)
                     {
-                        if constexpr (std::is_same_v<T, std::vector<int>>) value.push_back(std::any_cast<int>(parser->values[i]->value->vector_value[j]));
-                        else if constexpr (std::is_same_v<T, std::vector<float>>) value.push_back(std::any_cast<float>(parser->values[i]->value->vector_value[j]));
-                        else if constexpr (std::is_same_v<T, std::vector<std::string>>) value.push_back(std::any_cast<std::string>(parser->values[i]->value->vector_value[j]));
+                        if constexpr (std::is_same_v<T, std::vector<int>>) value.push_back(std::any_cast<int>(parser.values[i]->value->vector_value[j]));
+                        else if constexpr (std::is_same_v<T, std::vector<float>>) value.push_back(std::any_cast<float>(parser.values[i]->value->vector_value[j]));
+                        else if constexpr (std::is_same_v<T, std::vector<std::string>>) value.push_back(std::any_cast<std::string>(parser.values[i]->value->vector_value[j]));
                     }
                 }
 
-                (*map)[key] = value;
+                map[key] = value;
             }
         }
 
@@ -74,10 +74,10 @@ namespace json
         friend std::map<std::string, T> load(const std::string& fp);
 
         template <typename T>
-        friend void load(const std::string& fp, std::map<std::string, T>* map);
+        friend void load(const std::string& fp, std::map<std::string, T>& map);
 
         template <typename T>
-        friend void dump(const std::string& fp, std::map<std::string, T>* map);
+        friend void dump(const std::string& fp, std::map<std::string, T>& map);
     };
 
 
@@ -91,14 +91,14 @@ namespace json
         catch (const std::runtime_error& ex) { std::cout << ex.what() << "\n"; }
 
         std::map<std::string, T> dict;
-        Detail::fill_map(&dict, &parser);
+        Detail::fill_map(dict, parser);
 
         return dict;
     }
     
 
     template <typename T>
-    void load(const std::string& fp, std::map<std::string, T>* map)
+    void load(const std::string& fp, std::map<std::string, T>& map)
     {
         std::string contents = Detail::read_file(fp);
 
@@ -106,12 +106,12 @@ namespace json
         try { parser.parse(); }
         catch (const std::runtime_error& ex) { std::cout << ex.what() << "\n"; }
 
-        Detail::fill_map(map, &parser);
+        Detail::fill_map(map, parser);
     }
 
 
     template <typename T>
-    void dump(const std::string& fp, std::map<std::string, T>* map)
+    void dump(const std::string& fp, std::map<std::string, T>& map)
     {
         // clear out existing data to write in new dictionary
         std::ofstream ofs;
@@ -121,7 +121,7 @@ namespace json
         std::ofstream file(fp);
         std::string final_string = "{\n\t";
         
-        for (auto& pair : *map)
+        for (auto& pair : map)
         {
             std::string key = pair.first;
             Detail::turn_into_str(key);

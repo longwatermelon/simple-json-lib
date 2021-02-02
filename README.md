@@ -13,9 +13,9 @@ loading file:
 
 or if you dont like angular brackets
 
-```json::load(file path, map pointer);```
+```json::load(file path, map);```
 
 
 dumping into file:
 
-```json::dump(file path, map pointer);```
+```json::dump(file path, map);```
