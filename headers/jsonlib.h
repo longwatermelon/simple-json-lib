@@ -7,6 +7,8 @@
 #include <sstream>
 #include <typeinfo>
 #include <string>
+#include <variant>
+
 
 namespace json
 {
@@ -42,14 +44,10 @@ namespace json
                 if constexpr (std::is_same_v<T, std::string>) value = parser.values[i]->value->string_value;
                 else if constexpr (std::is_same_v<T, int>) value = parser.values[i]->value->int_value;
                 else if constexpr (std::is_same_v<T, float>) value = parser.values[i]->value->float_value;
-                else if constexpr (std::is_same_v<T, std::vector<std::string>> || std::is_same_v<T, std::vector<int>> || std::is_same_v<T, std::vector<float>>)
+                else if constexpr (std::is_same_v<T, std::vector<std::variant<std::string, int, float>>>)
                 {
                     for (int j = 0; j < parser.values[i]->value->vector_value.size(); ++j)
-                    {
-                        if constexpr (std::is_same_v<T, std::vector<int>>) value.push_back(std::any_cast<int>(parser.values[i]->value->vector_value[j]));
-                        else if constexpr (std::is_same_v<T, std::vector<float>>) value.push_back(std::any_cast<float>(parser.values[i]->value->vector_value[j]));
-                        else if constexpr (std::is_same_v<T, std::vector<std::string>>) value.push_back(std::any_cast<std::string>(parser.values[i]->value->vector_value[j]));
-                    }
+                        value.push_back(std::any_cast<std::decay<decltype(*(parser.values[i]->value->vector_value).begin())>::type>(parser.values[i]->value->vector_value[j]));
                 }
 
                 map[key] = value;
