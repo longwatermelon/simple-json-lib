@@ -47,7 +47,7 @@ namespace json
                 else if constexpr (std::is_same_v<T, std::vector<std::variant<std::string, int, float>>>)
                 {
                     for (int j = 0; j < parser.values[i]->value->vector_value.size(); ++j)
-                        value.push_back(std::any_cast<std::decay<decltype(*(parser.values[i]->value->vector_value).begin())>::type>(parser.values[i]->value->vector_value[j]));
+                        value.push_back(std::any_cast<std::decay<decltype(parser.values[i]->value->vector_value.begin())>::type>(parser.values[i]->value->vector_value[j]));
                 }
 
                 map[key] = value;
