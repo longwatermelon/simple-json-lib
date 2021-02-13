@@ -3,7 +3,6 @@
 int main()
 {
 	// example code
-	// this will probably throw an error since jsontest.json is always changing
 	std::string path = "jsontest.json";
 
 
